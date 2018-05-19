@@ -5,6 +5,16 @@ terraform-http-stateserver => un (very simple) remote backend http pour partager
 
 terraform-provider-flownet => un custom provider pour un outil proprietaire "flownet", permettant de manipuler sous forme de ressources terraform les objets proprietaires de cet outil "flownet"
 
+## Build ##
+
+Voir la doc [officielle ](https://golang.org/cmd/go/#hdr-Compile_packages_and_dependencies)
+
+Sinon :
+
+- (set|export) GOOS=linux
+- (set|export) GOARCH=amd64
+- fab@gobox:/go_workspace/src/terraform-provider-bosh$ go build -o terraform-provider-bosh
+
 ## Usage ##
 
 1. cloner le repo
