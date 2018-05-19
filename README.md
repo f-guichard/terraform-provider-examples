@@ -5,6 +5,8 @@ terraform-http-stateserver => un (very simple) remote backend http pour partager
 
 terraform-provider-flownet => un custom provider pour un outil proprietaire "flownet", permettant de manipuler sous forme de ressources terraform les objets proprietaires de cet outil "flownet"
 
+terraform-provider-bosh => un custom provider pour bosh, permettant de manipuler sous forme de ressources terraform des stemcell, releases et deploiements Bosh
+
 ## Build ##
 
 Voir la doc [officielle ](https://golang.org/cmd/go/#hdr-Compile_packages_and_dependencies)
