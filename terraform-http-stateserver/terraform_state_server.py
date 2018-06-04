@@ -14,6 +14,10 @@ _CONTROLLER_NAME = "Terraform State Controller"
 _TFSTATES_URL = "/"+CONTROLLER_VERSION+"/states"
 _TFSTATE_ID = "/"+CONTROLLER_VERSION+"/states/<stateid>"
 
+#Basic Auth Forced
+#Set to False if not desired
+_HTTP_AUTH_REQUIRED = True
+
 _HELPER_RESPONSE = {
     _CONTROLLER_NAME: CONTROLLER_VERSION,
     "GET "+_TFSTATES_URL : {
@@ -42,6 +46,21 @@ _HELPER_RESPONSE = {
     }
 }
 
+######### Rework all that
+#Extraire le pass d'un user
+def getPass(user, dbpasswd, tfstateid):
+    return dbpasswd.get(tfstateid)["password"]
+
+##Lire le contenu de la database des utilisateurs autorises
+def loaddb():
+    try:
+        with open('db/users.db', 'r') as usersdb:
+            return json.load(usersdb)
+    except Exception as ex:
+        print('Erreur : {}'.format(ex))
+        exit(1)
+#########
+
 ##Ecrire une methode qui persiste sur le fileystem
 def persiststate(tfstatestruct):
     try:
@@ -50,6 +69,9 @@ def persiststate(tfstatestruct):
     except Exception as ex:
         print('Erreur : {}'.format(ex))
         exit(1)
+
+#Structure de stockage des users/log
+credz = loaddb()
 
 #Structure de persistence (ouaip Bob...)
 ramDic = {"example":{"version": 3, "terraform_version": "0.11.7", "serial": 1, \
@@ -88,6 +110,14 @@ def list_state(stateid):
 @app.route(_TFSTATE_ID, methods=['POST'])
 def create_state(stateid):
     body = request.get_json(force=True)
+    ###Ouch bis ! check for framework || decorated function
+    if _HTTP_AUTH_REQUIRED:
+        user = request.authorization.username
+        passwd = request.authorization.password
+        if passwd != getPass(user, credz, stateid):
+            response = jsonify("Need proper credz")
+            response.status_code = 401
+            return response
     #Ouchhhhhhhhhh
     ramDic[stateid] = body
     response = jsonify({'name':stateid},{"tfstate":ramDic.get(stateid)})
@@ -97,6 +127,14 @@ def create_state(stateid):
 
 @app.route(_TFSTATE_ID, methods=['DELETE'])
 def delete_flows(stateid):
+    ###Ouch bis ! check for framework || decorated function
+    if _HTTP_AUTH_REQUIRED:
+        user = request.authorization.username
+        passwd = request.authorization.password
+        if passwd != getPass(user, credz, stateid):
+            response = jsonify("Need proper credz")
+            response.status_code = 401
+            return response
     #Ouchhhhhhhhhh
     response = jsonify(ramDic.pop(stateid))
     persiststate(ramDic)
