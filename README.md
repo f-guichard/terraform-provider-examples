@@ -17,6 +17,14 @@ Sinon :
 - (set|export) GOARCH=amd64
 - fab@gobox:/go_workspace/src/terraform-provider-bosh$ go build -o terraform-provider-bosh
 
+## Tests ##
+
+Les providers ont ete teste sur le version 0.11
+
+Seul le provider pour HP Asset Manager a ete ecrit et teste avec le version 0.12.23
+
+Voir terraform-provider-assetmgmt/scripts/tests.sh pour lancer un serveur avec un tfstate local
+
 ## Usage ##
 
 1. cloner le repo

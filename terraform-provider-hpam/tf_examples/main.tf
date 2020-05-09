@@ -4,11 +4,11 @@ provider "hpam" {
   password = "time"
 }
 
-terraform {
-  backend "http" {
-    address = "http://127.0.0.1:40000/v1/states/assets"
-  }
-}
+//terraform {
+//  backend "http" {
+//    address = "http://127.0.0.1:40000/v1/states/assets"
+//  }
+//}
 
 resource "hpam_basicat" "powerup_basicat" {
   name = "yy"
